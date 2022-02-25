@@ -8,10 +8,12 @@ const devConfig = {
     password: process.env.PG_PASSWORD,
     port: process.env.PG_PORT   
 }
-const proConfig = {
-    connectionString: process.env.DATABASE_URL//heroku addons
-}
+const proConfig = process.env.DATABASE_URL;
 
-const pool = new Pool(process.env.NODE_ENV === "production" ? proConfig : devConfig);
+const pool = new Pool({
+    connectionString: process.env.NODE_ENV === "production" ? proConfig : devConfig
+});
 
 module.exports = pool;
+
+//postgres://knlxjclxfousxc:bbe97d6e94ba7b352c8a82225695c804e4e5e677e2ec45687a7c2888c6e0b3d5@ec2-54-156-60-12.compute-1.amazonaws.com:5432/dcd2l9vch4ir42

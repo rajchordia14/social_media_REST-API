@@ -25,6 +25,7 @@ app.post('/api/authenticate',(req,res)=>{
         username :'raj',//dew
         email: 'rajchordia@gmail.com',
     }
+    
     jwt.sign({user},'secretkey',(err,token)=>{
         res.json({token: token});
     });
