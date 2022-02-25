@@ -6,8 +6,10 @@ const queries = require("./src/queries");
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
+const PORT = process.env.PORT || 5000;
 
 const {Pool, Client} = require("pg");
+
 const e = require('express');
 app.get('/api',(req,res)=>{
     res.json({
@@ -20,10 +22,10 @@ app.post('/api/authenticate',(req,res)=>{
     //Mock user
     const user = {
         id: 1,
-        username :'raj',
+        username :'raj',//dew
         email: 'rajchordia@gmail.com',
     }
-    jwt.sign({user},process.env.ACCESS_TOKEN,(err,token)=>{
+    jwt.sign({user},'secretkey',(err,token)=>{
         res.json({token: token});
     });
 });
@@ -31,8 +33,7 @@ app.post('/api/authenticate',(req,res)=>{
 //POST api/follow/:id
 
 app.post('/api/follow/:id',verifyToken,async (req,res)=>{
-
-    jwt.verify(req.token,process.env.ACCESS_TOKEN,(err,authData)=>{
+    jwt.verify(req.token,'secretkey',(err,authData)=>{
         if(err)
             res.sendStatus(403);   
         else{
@@ -55,6 +56,7 @@ app.post('/api/follow/:id',verifyToken,async (req,res)=>{
                                 throw err2;
                             else
                             {
+
                                 pool.query(`UPDATE userinfo SET followers = followers+1 WHERE id=${follow}`,(err3,res3)=>{
                                     if(err3)
                                         throw err3;
@@ -85,7 +87,7 @@ app.post('/api/follow/:id',verifyToken,async (req,res)=>{
 //POST api/unfollow/:id
 app.post('/api/unfollow/:id',verifyToken,async (req,res)=>{
 
-    jwt.verify(req.token,process.env.ACCESS_TOKEN,(err,authData)=>{
+    jwt.verify(req.token,'secretkey',(err,authData)=>{
         if(err)
             res.sendStatus(403);   
         else{
@@ -136,7 +138,7 @@ app.post('/api/unfollow/:id',verifyToken,async (req,res)=>{
 });
 //GET api/user
 app.get('/api/user',verifyToken,async (req,res)=>{
-    jwt.verify(req.token,process.env.ACCESS_TOKEN,(err,authData)=>{
+    jwt.verify(req.token,'secretkey',(err,authData)=>{
         if(err)
             res.sendStatus(403);
         else
@@ -159,7 +161,7 @@ app.get('/api/user',verifyToken,async (req,res)=>{
 });
 //POST api/posts
 app.post('/api/posts/',verifyToken,async (req,res)=>{
-    jwt.verify(req.token,process.env.ACCESS_TOKEN,(err,authData)=>{
+    jwt.verify(req.token,'secretkey',(err,authData)=>{
         if(err)
             throw err;
         else
@@ -187,7 +189,7 @@ app.post('/api/posts/',verifyToken,async (req,res)=>{
 })
 //DELETE api/posts/:id
 app.post('/api/posts/:id',verifyToken,async (req,res)=>{
-    jwt.verify(req.token,process.env.ACCESS_TOKEN,(err,authData)=>{
+    jwt.verify(req.token,'secretkey',(err,authData)=>{
         if(err)
             throw err;
         else
@@ -211,7 +213,7 @@ app.post('/api/posts/:id',verifyToken,async (req,res)=>{
 })
 //POST api/like/:id
 app.post('/api/like/:id',verifyToken,async (req,res)=>{
-    jwt.verify(req.token,process.env.ACCESS_TOKEN,(err,authData)=>{
+    jwt.verify(req.token,'secretkey',(err,authData)=>{
         if(err)
             throw err;
         else
@@ -238,7 +240,7 @@ app.post('/api/like/:id',verifyToken,async (req,res)=>{
 })
 //POST api/unlike/:id
 app.post('/api/unlike/:id',verifyToken,async (req,res)=>{
-    jwt.verify(req.token,process.env.ACCESS_TOKEN,(err,authData)=>{
+    jwt.verify(req.token,'secretkey',(err,authData)=>{
         if(err)
             throw err;
         else
@@ -266,7 +268,7 @@ app.post('/api/unlike/:id',verifyToken,async (req,res)=>{
 });
 //POST api/comment/:id
 app.post('/api/comment/:id',verifyToken,async (req,res)=>{
-    jwt.verify(req.token,process.env.ACCESS_TOKEN,(err,authData)=>{
+    jwt.verify(req.token,'secretkey',(err,authData)=>{
         if(err)
             throw err;
         else
@@ -296,7 +298,7 @@ app.post('/api/comment/:id',verifyToken,async (req,res)=>{
 });
 //GET api/post/:id
 app.get('/api/posts/:id',verifyToken,async (req,res)=>{
-    jwt.verify(req.token,process.env.ACCESS_TOKEN,(err,authData)=>{
+    jwt.verify(req.token,'secretkey',(err,authData)=>{
         if(err)
             throw err;
         else
@@ -322,7 +324,7 @@ app.get('/api/posts/:id',verifyToken,async (req,res)=>{
 
 //GET api/all_posts
 app.get('/api/all_posts',verifyToken,async (req,res)=>{
-    jwt.verify(req.token,process.env.ACCESS_TOKEN,(err,authData)=>{
+    jwt.verify(req.token,'secretkey',(err,authData)=>{
         if(err)
             throw err;
         else
@@ -345,6 +347,8 @@ app.get('/api/all_posts',verifyToken,async (req,res)=>{
 //Verify Token
 function verifyToken(req,res,next)
 {
+
+
     const bearerHeader = req.headers['authorization'];
     //Check if bearer is undefined
     if(typeof(bearerHeader) !=='undefined'){
@@ -361,4 +365,5 @@ function verifyToken(req,res,next)
 
 
 }
-app.listen(5000,() => console.log('Server started on port 5000'));
+
+app.listen(PORT,() => console.log(`Server started on port ${PORT}`));
