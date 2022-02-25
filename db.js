@@ -9,7 +9,7 @@ const devConfig = {
     port: process.env.PG_PORT   
 }
 const proConfig = process.env.DATABASE_URL;
-
+console.log(process.env.NODE_ENV);
 const pool = new Pool({
     connectionString: process.env.NODE_ENV === "production" ? proConfig : devConfig
 });
