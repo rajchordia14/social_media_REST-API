@@ -25,7 +25,7 @@ app.post('/api/authenticate',(req,res)=>{
         username :'raj',//dew
         email: 'rajchordia@gmail.com',
     }
-    
+
     jwt.sign({user},'secretkey',(err,token)=>{
         res.json({token: token});
     });
@@ -46,6 +46,7 @@ app.post('/api/follow/:id',verifyToken,async (req,res)=>{
                 pool.query(`SELECT * FROM follow WHERE userid = ${user} AND followerid = ${follow}`,(err1,res1)=>{
                     if(err1)
                         throw err1;
+
                     else if(res1.rowCount>0)
                     {   
                         res.status(403).send('User already followed');
@@ -348,8 +349,6 @@ app.get('/api/all_posts',verifyToken,async (req,res)=>{
 //Verify Token
 function verifyToken(req,res,next)
 {
-
-
     const bearerHeader = req.headers['authorization'];
     //Check if bearer is undefined
     if(typeof(bearerHeader) !=='undefined'){
@@ -363,8 +362,6 @@ function verifyToken(req,res,next)
         res.sendStatus(403);
 
     }
-
-
 }
 
 app.listen(PORT,() => console.log(`Server started on port ${PORT}`));
