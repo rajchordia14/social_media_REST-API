@@ -12,7 +12,7 @@ const proConfig = process.env.DATABASE_URL;
 console.log(proConfig);
 console.log(typeof(process.env.NODE_ENV));
 
-const pool = new Pool(proConfig);
+const pool = new Pool({connectionString:proConfig});
 console.log("RAJ");
 console.log(pool);
 module.exports = pool;
